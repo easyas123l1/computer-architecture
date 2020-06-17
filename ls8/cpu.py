@@ -70,10 +70,15 @@ class CPU:
         print()
 
     def LDI(self):
-        pass
+        reg_num = self.ram[self.pc + 1]
+        value = self.ram[self.pc + 2]
+        self.reg[reg_num] = value
+        self.pc += 3
 
     def PRN(self):
-        pass
+        reg_num = self.ram[self.pc + 1]
+        print(self.reg[reg_num])
+        self.pc += 2
 
     def MUL(self):
         pass
