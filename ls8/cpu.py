@@ -19,22 +19,22 @@ class CPU:
     def ram_write(self, value, address):
         self.ram[address] = value
 
-    def load(self):
+    def load(self, program):
         """Load a program into memory."""
 
         address = 0
 
         # For now, we've just hardcoded a program:
 
-        program = [
-            # From print8.ls8
-            0b10000010,  # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111,  # PRN R0
-            0b00000000,
-            0b00000001,  # HLT
-        ]
+        # program = [
+        #     # From print8.ls8
+        #     0b10000010,  # LDI R0,8
+        #     0b00000000,
+        #     0b00001000,
+        #     0b01000111,  # PRN R0
+        #     0b00000000,
+        #     0b00000001,  # HLT
+        # ]
 
         for instruction in program:
             self.ram[address] = instruction
@@ -70,13 +70,17 @@ class CPU:
         print()
 
     def LDI(self):
+
         reg_num = self.ram[self.pc + 1]
+        reg_num = int(reg_num, 2)
         value = self.ram[self.pc + 2]
+        value = int(value, 2)
         self.reg[reg_num] = value
         self.pc += 3
 
     def PRN(self):
         reg_num = self.ram[self.pc + 1]
+        reg_num = int(reg_num, 2)
         print(self.reg[reg_num])
         self.pc += 2
 
@@ -93,14 +97,14 @@ class CPU:
         while self.running:
             # Instruction Register
             IR = self.ram[self.pc]
-            branch_table = {
-                self.LDI: self.LDI,
-                self.PRN: self.PRN,
-                self.MUL: self.MUL,
-                self.HLT: self.HLT
-            }
-            if IR in branch_table:
-                branch_table[IR]()
+            if IR == '10000010':
+                self.LDI()
+            elif IR == '01000111':
+                self.PRN()
+            elif IR == '10100010':
+                self.MUL()
+            elif IR == '00000001':
+                self.HLT()
             else:
                 print(f'Unknown instruction: {IR}, at address PC: {self.pc}')
                 sys.exit(1)
