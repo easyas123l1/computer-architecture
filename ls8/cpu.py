@@ -85,7 +85,12 @@ class CPU:
         self.pc += 2
 
     def MUL(self):
-        pass
+        reg_a = self.ram[self.pc + 1]
+        reg_b = self.ram[self.pc + 2]
+        reg_a = int(reg_a, 2)
+        reg_b = int(reg_b, 2)
+        reg_a *= reg_b
+        self.pc += 3
 
     def HLT(self):
         self.pc += 1
